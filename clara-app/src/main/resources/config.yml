@@ -6,17 +6,17 @@ aggregation:
   platforms:
     kubernetes:
       namespaces:
-        - TBD
+        - default
       aggregators:
         kube-api:
         dns:
-          logs-since-time: 2024-04-27T00:00:00Z
+          logs-since-time: ${CLARA_PLATFORMS_KUBERNETES_AGGREGATORS_DNS_LOGS_SINCE_TIME:-2024-05-07T06:00:00Z}
         open-telemetry:
           listen-port: 7878
           listen-duration: 60 seconds
         syft-sbom:
           sbom-file-path: sbom/
-          use-stored-sbom-files: false
+          use-stored-sbom-files: true
 
 merge:
   comparison-strategy: Equals
@@ -34,11 +34,10 @@ export:
       output-type: SVG
       output-file: generated/architecture.svg
     gropius:
-      enabled: false
-      project-id: tbd
-      graphql-backend-url: tbd
+      project-id: ${CLARA_GROPIUS_GRAPHQL_PROJECT_ID}
+      graphql-backend-url: ${CLARA_GROPIUS_GRAPHQL_BACKEND_URL}
       graphql-backend-authentication:
-        authentication-url: tbd
+        authentication-url: ${CLARA_GROPIUS_GRAPHQL_AUTHENTICATION_URL}
         username: ${CLARA_GROPIUS_GRAPHQL_USERNAME}
         password: ${CLARA_GROPIUS_GRAPHQL_PASSWORD}
         client-id: ${CLARA_GROPIUS_GRAPHQL_CLIENT_ID}
