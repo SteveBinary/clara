@@ -36,9 +36,9 @@ export:
     gropius:
       enabled: false
       project-id: tbd
-      graphql-backend-url: http://devonport.informatik.uni-stuttgart.de:8082/graphql
+      graphql-backend-url: tbd
       graphql-backend-authentication:
-        authentication-url: http://devonport.informatik.uni-stuttgart.de:3000/authenticate/oauth/5590d02a-99b5-4864-be49-e45f426332ab/token
+        authentication-url: tbd
         username: ${CLARA_GROPIUS_GRAPHQL_USERNAME}
         password: ${CLARA_GROPIUS_GRAPHQL_PASSWORD}
         client-id: ${CLARA_GROPIUS_GRAPHQL_CLIENT_ID}
