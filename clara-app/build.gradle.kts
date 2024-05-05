@@ -219,7 +219,7 @@ val createDockerfile by tasks.creating(Dockerfile::class) {
     runCommand("curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin")
 
     workingDir("/app")
-    runCommand("chown -R clara:clara /app")
+    // runCommand("chown -R clara:clara /app")
 
     copyFile("--chown=clara:clara --from=jre-build-stage /jre", "/jre")
     copyFile("--chown=clara:clara ${project.name}-${project.version}-${standaloneJar.archiveClassifier.get()}.jar", "/app/${project.name}.jar")
