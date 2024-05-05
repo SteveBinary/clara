@@ -26,8 +26,8 @@ class GraphVizExporter(private val config: Config) : Exporter {
     override fun export(components: Set<Component>, communications: Set<Communication>): Either<GraphVizExportFailure, Unit> {
         log.info { "Export to GraphViz ..." }
 
-        val graphVizVersion = getGraphVizVersion().getOrElse { return Either.Left(it) }
-        log.info { "Using GraphViz version: $graphVizVersion" }
+        // val graphVizVersion = getGraphVizVersion().getOrElse { return Either.Left(it) }
+        // log.info { "Using GraphViz version: $graphVizVersion" }
 
         val graphvizCode = GraphVizCodeGenerator.generateDotCode(components, communications)
 
