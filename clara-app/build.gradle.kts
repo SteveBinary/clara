@@ -198,6 +198,8 @@ val createDockerfile by tasks.creating(Dockerfile::class) {
 
     arg("CREATION_TIME")
 
+    exposePort(7878)
+
     label(
         mapOf(
             "org.opencontainers.image.title" to project.name,
@@ -212,7 +214,8 @@ val createDockerfile by tasks.creating(Dockerfile::class) {
 
     runCommand("addgroup --system --gid 1337 clara")
     runCommand("adduser --disabled-password --no-create-home --system --uid 1337 --ingroup clara clara")
-    runCommand("apk add graphviz")
+    runCommand("apk add graphviz && apk add curl")
+    runCommand("curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin")
 
     workingDir("/app")
     runCommand("chown -R clara:clara /app")
