@@ -1,5 +1,5 @@
 app:
-  block-after-finish: false
+  block-after-finish: true
   log-config: true
 
 aggregation:
