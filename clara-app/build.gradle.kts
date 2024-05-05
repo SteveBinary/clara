@@ -171,14 +171,14 @@ val copyStandaloneJarIntoDockerfileDirectory by tasks.creating(Copy::class) {
 }
 
 val createDockerfile by tasks.creating(Dockerfile::class) {
-    group = "docker"
+    // group = "docker"
     description = "Create the Dockerfile for the image."
 
     // create the minified JRE
 
-    from("eclipse-temurin:17-alpine as jre-build-stage")
-
-    runCommand(
+    // from("eclipse-temurin:17-alpine as jre-build-stage")
+    from("eclipse-temurin:17")
+    /*runCommand(
         "\$JAVA_HOME/bin/jlink" +
                 " --add-modules java.base" +
                 " --add-modules java.desktop" +
@@ -190,11 +190,11 @@ val createDockerfile by tasks.creating(Dockerfile::class) {
                 " --strip-debug" +
                 " --compress=2" +
                 " --output /jre"
-    )
+    )*/
 
     // create the actual image
 
-    from("alpine:3.19")
+    // from("alpine:3.19")
 
     arg("CREATION_TIME")
 
@@ -212,21 +212,21 @@ val createDockerfile by tasks.creating(Dockerfile::class) {
         )
     )
 
-    runCommand("addgroup --system --gid 1337 clara")
-    runCommand("adduser --disabled-password --no-create-home --system --uid 1337 --ingroup clara clara")
+    // runCommand("addgroup --system --gid 1337 clara")
+    // runCommand("adduser --disabled-password --no-create-home --system --uid 1337 --ingroup clara clara")
     runCommand("apk add graphviz && apk add curl")
     runCommand("curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin")
 
     workingDir("/app")
-    runCommand("chown -R clara:clara /app")
+    // runCommand("chown -R clara:clara /app")
 
-    copyFile("--chown=clara:clara --from=jre-build-stage /jre", "/jre")
-    copyFile("--chown=clara:clara ${project.name}-${project.version}-${standaloneJar.archiveClassifier.get()}.jar", "/app/${project.name}.jar")
-
-    user("clara")
-    defaultCommand("/jre/bin/java", "-jar", "${project.name}.jar")
+    // copyFile("--chown=clara:clara --from=jre-build-stage /jre", "/jre")
+    // copyFile("--chown=clara:clara ${project.name}-${project.version}-${standaloneJar.archiveClassifier.get()}.jar", "/app/${project.name}.jar")
+    copyFile("${project.name}-${project.version}-${standaloneJar.archiveClassifier.get()}.jar", "/app/${project.name}.jar")
+    // user("clara")
+    // defaultCommand("/jre/bin/java", "-jar", "${project.name}.jar")
+    defaultCommand("sh", "-c", "java -jar ${project.name}.jar")
 }
-
 val buildImage by tasks.creating(DockerBuildImage::class) {
     dependsOn(createDockerfile, copyStandaloneJarIntoDockerfileDirectory)
 
