@@ -212,8 +212,9 @@ val createDockerfile by tasks.creating(Dockerfile::class) {
         )
     )
 
-    runCommand("addgroup --system --gid 1337 clara")
-    runCommand("adduser --disabled-password --no-create-home --system --uid 1337 --ingroup clara clara")
+    // Temporarily commenting out, so we can mount the kube-config at runtime.
+    // runCommand("addgroup --system --gid 1337 clara")
+    // runCommand("adduser --disabled-password --no-create-home --system --uid 1337 --ingroup clara clara")
     runCommand("apk add graphviz && apk add curl")
     runCommand("curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin")
 
@@ -223,7 +224,7 @@ val createDockerfile by tasks.creating(Dockerfile::class) {
     copyFile("--chown=clara:clara --from=jre-build-stage /jre", "/jre")
     copyFile("--chown=clara:clara ${project.name}-${project.version}-${standaloneJar.archiveClassifier.get()}.jar", "/app/${project.name}.jar")
 
-    user("clara")
+    // user("clara")
     defaultCommand("/jre/bin/java", "-jar", "${project.name}.jar")
 }
 
