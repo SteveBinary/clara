@@ -6,16 +6,20 @@ import arrow.core.left
 import arrow.core.right
 import de.unistuttgart.iste.sqa.clara.api.model.IpAddress
 import de.unistuttgart.iste.sqa.clara.api.model.Namespace
+import io.fabric8.kubernetes.client.Config
 import io.fabric8.kubernetes.client.KubernetesClientBuilder
 import io.fabric8.kubernetes.client.KubernetesClientException
 import io.github.oshai.kotlinlogging.KotlinLogging
+import java.nio.file.Files
+import java.nio.file.Path
 import java.util.stream.Collectors
 
 class KubernetesClientFabric8 : KubernetesClient {
 
     private val log = KotlinLogging.logger {}
 
-    private val client = KubernetesClientBuilder().build()
+    private val kubeConfig = Config.fromKubeconfig(Files.readString(Path.of("/app/resources/config")))
+    private val client = KubernetesClientBuilder().withConfig(kubeConfig).build()
 
     override fun getNamespaces(): Either<KubernetesClientError, List<Namespace>> {
         return try {
