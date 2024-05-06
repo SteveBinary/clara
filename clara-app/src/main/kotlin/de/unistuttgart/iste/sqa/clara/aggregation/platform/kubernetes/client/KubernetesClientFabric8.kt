@@ -7,18 +7,26 @@ import arrow.core.right
 import de.unistuttgart.iste.sqa.clara.api.model.IpAddress
 import de.unistuttgart.iste.sqa.clara.api.model.Namespace
 import io.fabric8.kubernetes.client.Config
+import io.fabric8.kubernetes.client.ConfigBuilder
 import io.fabric8.kubernetes.client.KubernetesClientBuilder
 import io.fabric8.kubernetes.client.KubernetesClientException
 import io.github.oshai.kotlinlogging.KotlinLogging
-import java.nio.file.Files
-import java.nio.file.Path
+import java.io.File
 import java.util.stream.Collectors
 
 class KubernetesClientFabric8 : KubernetesClient {
 
     private val log = KotlinLogging.logger {}
 
-    private val kubeConfig = Config.fromKubeconfig(Files.readString(Path.of("/app/resources/config")))
+    private val kubeConfig: Config? = ConfigBuilder()
+        .withConnectionTimeout(5000) // ms
+        .withRequestTimeout(7000) // ms
+        .withRequestRetryBackoffLimit(12) // times
+        .withRequestRetryBackoffInterval(1)
+        .withLoggingInterval(1000)
+        .withFile(File("/app/resources/config"))
+        .build()
+
     private val client = KubernetesClientBuilder().withConfig(kubeConfig).build()
 
     override fun getNamespaces(): Either<KubernetesClientError, List<Namespace>> {
