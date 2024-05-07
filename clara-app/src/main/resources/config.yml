@@ -13,7 +13,7 @@ aggregation:
           logs-since-time: ${CLARA_PLATFORMS_KUBERNETES_AGGREGATORS_DNS_LOGS_SINCE_TIME:-2024-05-07T06:00:00Z}
         open-telemetry:
           listen-port: 7878
-          listen-duration: 60 seconds
+          listen-duration: 90 seconds
         syft-sbom:
           sbom-file-path: sbom/
           use-stored-sbom-files: true
